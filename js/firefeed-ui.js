@@ -43,6 +43,7 @@ FirefeedUI.prototype._setupHandlers = function() {
     e.preventDefault();
     self.logout();
   });
+
   $(document).on("keypress", "#qnty", function(e) {
     var a = [];
     var k = e.which;
@@ -227,14 +228,6 @@ FirefeedUI.prototype.renderHome = function(e) {
 
   $("#about-link").remove();
 
-  // Attach handler to display the latest 10 sparks.
-  self._handleNewSpark(
-    "spark-index-list", 10,
-    self._firefeed.onLatestSpark.bind(self._firefeed, this._loggedIn)
-  );
-
-  $('#accept-button-div').hide();
-
   return function() { self._firefeed.unload(); };
 };
 
@@ -316,7 +309,7 @@ FirefeedUI.prototype.renderTimeline = function(info) {
   self._handleNewSpark(
     "spark-timeline-list", 80,
     // self._firefeed.onNewSpark.bind(self._firefeed)
-    self._firefeed.onLatestSpark.bind(self._firefeed, this._loggedIn)
+    self._firefeed.onLatestSpark.bind(self._firefeed)
   );
 
   // Get some "suggested" users.
@@ -335,10 +328,6 @@ FirefeedUI.prototype.renderTimeline = function(info) {
       });
     });
   });
-
-  if(!this._loggedIn){
-	$('#accept-button-div').hide();
-  }
 
   // Make profile fields editable.
   $(".editable").editable(function(value, settings) {
@@ -407,7 +396,7 @@ FirefeedUI.prototype.renderProfile = function(uid) {
   // Render this user's tweets. Capped to 5 for now.
   self._handleNewSpark(
     "spark-profile-list", 5,
-    self._firefeed.onNewSparkFor.bind(self._firefeed, uid, this._loggedIn)
+    self._firefeed.onNewSparkFor.bind(self._firefeed, uid)
   );
   return function() { self._firefeed.unload(); };
 };
